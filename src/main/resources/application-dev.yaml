@@ -1,0 +1,8 @@
+spring:
+  temporal:
+    connection:
+      target: local
+
+logging:
+  level:
+    io.github.alexandreroman.temporalstory: DEBUG

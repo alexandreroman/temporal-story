@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: temporal-story-backend
+  ai:
+    openai:
+      chat:
+        options:
+          model: gpt-4.1-mini
+          temperature: 0.8
+          maxTokens: 1000
+      image:
+        options:
+          model: dall-e-3
+          n: 1
+          quality: standard
+          size: ${app.story.cover.width}x${app.story.cover.height}
+  temporal:
+    workersAutoDiscovery:
+      packages: io.github.alexandreroman.temporalstory.impl
+
+app:
+  story:
+    cover:
+      width: 1024
+      height: 1024
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    io.micrometer.registry.otlp.OtlpMeterRegistry: OFF
+
+management:
+  server:
+    port: 9001
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        add-additional-paths: true

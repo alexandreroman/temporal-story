@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col relative text-white">
+  <div class="min-h-[100dvh] flex flex-col relative text-white">
     <!-- Decorative elements -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary-500/20 rounded-full blur-[100px] animate-pulse-slow"></div>

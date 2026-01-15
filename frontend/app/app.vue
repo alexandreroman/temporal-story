@@ -16,7 +16,7 @@
     <main class="flex-grow flex flex-col">
       <NuxtPage />
     </main>
-    <footer class="py-6 text-center text-sm text-white/40 z-10 relative">
+    <footer class="pb-4 text-center text-sm text-white/40">
       <p>&copy; {{ new Date().getFullYear() }} Alexandre Roman. Licensed under Apache 2.0.</p>
     </footer>
   </div>

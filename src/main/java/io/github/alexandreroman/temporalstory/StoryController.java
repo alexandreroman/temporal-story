@@ -48,17 +48,21 @@ class StoryController {
 
     @GetMapping(path = "/api/story/{workflowId}")
     ResponseEntity<?> getStory(@PathVariable("workflowId") String workflowId) {
+        final var storyOpt = storyService.getStory(workflowId);
+        if (storyOpt.isPresent()) {
+            return ResponseEntity.ok(new StoryProgress(StoryWorkflowState.COMPLETED, storyOpt.get()));
+        }
+
         final var state = storyService.getState(workflowId);
         return switch (state) {
             case IDLE, INITIALIZING, GENERATING_STORY, PREPARING_COVER, GENERATING_COVER, SAVING_RESULTS ->
                     ResponseEntity.status(HttpStatus.ACCEPTED).body(new StoryProgress(state, null));
             case COMPLETED -> {
-                final var story = storyService.getStory(workflowId);
-                if (story.isEmpty()) {
+                if (storyOpt.isEmpty()) {
                     throw new IllegalStateException(
                             "Expecting story to have been completed for workflow " + workflowId);
                 }
-                yield ResponseEntity.ok(new StoryProgress(state, story.get()));
+                yield ResponseEntity.ok(new StoryProgress(state, storyOpt.get()));
             }
             case FAILED -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get story");
         };

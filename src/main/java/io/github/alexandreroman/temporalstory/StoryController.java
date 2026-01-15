@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
+@CrossOrigin
 class StoryController {
     private final Logger logger = LoggerFactory.getLogger(StoryController.class);
     private final StoryService storyService;

@@ -29,6 +29,11 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
+/**
+ * Implementation of the Story generation workflow.
+ * This workflow orchestrates the steps to create a story: generating text,
+ * creating a cover prompt, generating the cover image, and saving the result.
+ */
 @WorkflowImpl(taskQueues = "story-tasks")
 public class StoryWorkflowImpl implements StoryWorkflow {
     private final Logger logger = LoggerFactory.getLogger(StoryWorkflowImpl.class);
@@ -42,6 +47,7 @@ public class StoryWorkflowImpl implements StoryWorkflow {
 
     @Override
     public Story createStory(StoryParams params) {
+        // Extract workflow ID and sanitize it (removing prefix if necessary)
         final var workflowId = Workflow.getInfo().getWorkflowId().replace("story-", "");
         logger.debug("Story workflow {} started: params={}", workflowId, params);
         try {
@@ -54,15 +60,20 @@ public class StoryWorkflowImpl implements StoryWorkflow {
     }
 
     private Story doCreateStory(String workflowId, StoryParams params) {
+        // Step 1: Generate the story text based on inputs
         setState(workflowId, StoryWorkflowState.GENERATING_STORY);
-        final var storyTextOnly = storyActivities.generateStory(params.characterName(), params.fear(), params.language());
+        final var storyTextOnly = storyActivities.generateStory(params.characterName(), params.fear(),
+                params.language());
 
+        // Step 2: Generate a prompt for the cover image based on the story content
         setState(workflowId, StoryWorkflowState.PREPARING_COVER);
         final var coverPrompt = storyActivities.generateCoverPrompt(storyTextOnly, params.language());
 
+        // Step 3: Generate the cover image using DALL-E (or similar)
         setState(workflowId, StoryWorkflowState.GENERATING_COVER);
         final var cover = storyActivities.generateCover(coverPrompt);
 
+        // Step 4: Save the complete story (text + image URL)
         setState(workflowId, StoryWorkflowState.SAVING_RESULTS);
         final var story = new Story(storyTextOnly.title(), storyTextOnly.content(), cover);
         storyActivities.saveStory(story);

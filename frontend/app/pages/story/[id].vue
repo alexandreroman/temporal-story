@@ -5,13 +5,27 @@ const apiBase = config.public.apiBase
 
 const storyId = route.params.id as string
 
+interface Story {
+  title: string;
+  content: string;
+  cover?: {
+    url: string;
+  };
+}
+
+interface StoryStatus {
+  state: string;
+  story?: Story;
+}
+
 const loading = ref(true)
-const story = ref<any>(null)
+const story = ref<Story | null>(null)
 const error = ref('')
 const progressValue = ref(0)
 const progressMessage = ref('')
 const imageLoaded = ref(false)
 
+// State mapping to convert backend statuses to user-friendly progress messages and percentages
 const stateMap: Record<string, { percent: number; text: string }> = {
   'IDLE': { percent: 0, text: 'Awakening the magic...' },
   'INITIALIZING': { percent: 10, text: 'Summoning the story sprites...' },
@@ -31,6 +45,11 @@ const updateProgress = (state: string) => {
     }
 }
 
+/**
+ * Polls the backend for the current status of the story generation workflow.
+ * Updates the loading state and progress based on the response.
+ * Continues polling until the status is COMPLETED or FAILED.
+ */
 const pollStatus = async () => {
     loading.value = true
     progressValue.value = 0
@@ -39,12 +58,13 @@ const pollStatus = async () => {
     try {
         let completed = false
         while (!completed) {
-            const data = await $fetch<any>(`${apiBase}/api/story/${storyId}`)
+            const data = await $fetch<StoryStatus>(`${apiBase}/api/story/${storyId}`)
             
+            // Update UI with the latest state
             updateProgress(data.state)
 
             if (data.state === 'COMPLETED') {
-                story.value = data.story
+                story.value = data.story || null
                 completed = true
             } else if (data.state === 'FAILED') {
                 throw new Error('Story generation failed')
@@ -65,6 +85,7 @@ onMounted(() => {
     pollStatus()
 })
 
+// Update the page title dynamically when the story is loaded
 useHead({
     title: computed(() => story.value ? `${story.value.title} - Temporal Story` : 'Temporal Story')
 })

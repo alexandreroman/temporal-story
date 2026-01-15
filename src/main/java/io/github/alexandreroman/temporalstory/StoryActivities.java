@@ -20,11 +20,38 @@ import io.temporal.activity.ActivityInterface;
 
 @ActivityInterface
 public interface StoryActivities {
+    /**
+     * Generates the text content of the story.
+     * 
+     * @param characterName Name of the main character.
+     * @param fear          The fear to be overcome in the story.
+     * @param language      The language in which to write the story.
+     * @return A Story object containing title and content.
+     */
     Story generateStory(String characterName, String fear, String language);
 
+    /**
+     * Creates a detailed prompt for image generation based on the story content.
+     * 
+     * @param story    The generated story.
+     * @param language The language of the prompt (usually English for best
+     *                 results).
+     * @return A string description for the image generator.
+     */
     String generateCoverPrompt(Story story, String language);
 
+    /**
+     * Generates an image based on the provided prompt.
+     * 
+     * @param prompt The image description.
+     * @return A StoryCover object containing the image URL.
+     */
     StoryCover generateCover(String prompt);
 
+    /**
+     * Persists the final story to the database or storage.
+     * 
+     * @param story The complete story object.
+     */
     void saveStory(Story story);
 }

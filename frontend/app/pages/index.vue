@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+// Access runtime configuration to get API base URL
 const config = useRuntimeConfig()
 const apiBase = config.public.apiBase
 
-const characterInput = ref<any>(null)
+// Reference to the character input for auto-focus
+const characterInput = ref<HTMLInputElement | null>(null)
 
+// Form data model
 const form = ref({
   character: '',
   fear: '',
@@ -14,6 +17,7 @@ const form = ref({
 const loading = ref(false)
 const error = ref('')
 
+// Focus on the first input field when the component is mounted
 onMounted(() => {
   if (characterInput.value) {
     characterInput.value.focus()
@@ -26,6 +30,11 @@ const languages = [
   { code: 'es', label: 'Spanish' }
 ]
 
+/**
+ * Submits the form to generate a new story.
+ * It calls the backend API to initiate the story generation workflow.
+ * Upon success, it redirects the user to the story display page.
+ */
 const generateStory = async () => {
   if (!form.value.character || !form.value.fear) return
 
@@ -33,7 +42,7 @@ const generateStory = async () => {
   error.value = ''
 
   try {
-    const data = await $fetch<any>(`${apiBase}/api/story`, {
+    const data = await $fetch<{ workflowId: string }>(`${apiBase}/api/story`, {
       method: 'POST',
       body: new URLSearchParams({
         characterName: form.value.character,
@@ -45,6 +54,7 @@ const generateStory = async () => {
     const workflowId = data.workflowId
 
     if (workflowId) {
+        // Redirect to the story page using the returned workflow ID
         await navigateTo(`/story/${workflowId}`)
     } else {
         throw new Error('Could not retrieve story ID')

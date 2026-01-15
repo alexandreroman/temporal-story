@@ -36,6 +36,14 @@ class StoryController {
         this.storyService = storyService;
     }
 
+    /**
+     * Starts a new story generation workflow.
+     *
+     * @param characterName the name of the main character (defaults to "John")
+     * @param fear          the fear the character faces (defaults to "Night")
+     * @param language      the language of the story (defaults to "English")
+     * @return a response containing the workflow ID of the started process
+     */
     @PostMapping(path = "/api/story", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<NewStoryResponse> generateStory(
             @RequestParam(value = "characterName", required = false, defaultValue = "John") String characterName,
@@ -46,6 +54,13 @@ class StoryController {
         return ResponseEntity.created(URI.create("/api/story/" + workflowId)).body(new NewStoryResponse(workflowId));
     }
 
+    /**
+     * Retrieves the current status or final result of a story generation workflow.
+     *
+     * @param workflowId the ID of the workflow to check
+     * @return a response containing the current state and, if completed, the story
+     *         details
+     */
     @GetMapping(path = "/api/story/{workflowId}")
     ResponseEntity<?> getStory(@PathVariable("workflowId") String workflowId) {
         final var storyOpt = storyService.getStory(workflowId);
@@ -56,7 +71,7 @@ class StoryController {
         final var state = storyService.getState(workflowId);
         return switch (state) {
             case IDLE, INITIALIZING, GENERATING_STORY, PREPARING_COVER, GENERATING_COVER, SAVING_RESULTS ->
-                    ResponseEntity.status(HttpStatus.ACCEPTED).body(new StoryProgress(state, null));
+                ResponseEntity.status(HttpStatus.ACCEPTED).body(new StoryProgress(state, null));
             case COMPLETED -> {
                 if (storyOpt.isEmpty()) {
                     throw new IllegalStateException(

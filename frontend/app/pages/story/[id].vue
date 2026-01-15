@@ -64,6 +64,10 @@ const pollStatus = async () => {
 onMounted(() => {
     pollStatus()
 })
+
+useHead({
+    title: computed(() => story.value ? `${story.value.title} - Temporal Story` : 'Temporal Story')
+})
 </script>
 
 <template>

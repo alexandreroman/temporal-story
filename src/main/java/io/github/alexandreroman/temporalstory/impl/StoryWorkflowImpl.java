@@ -47,6 +47,7 @@ public class StoryWorkflowImpl implements StoryWorkflow {
         try {
             return doCreateStory(workflowId, params);
         } catch (RuntimeException e) {
+            setState(workflowId, StoryWorkflowState.FAILED);
             logger.warn("Story workflow {} failed", workflowId, e);
             throw e;
         }

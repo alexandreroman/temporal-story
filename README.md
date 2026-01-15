@@ -1,5 +1,7 @@
 # Temporal Story
 
+https://github.com/user-attachments/assets/98ab1626-65db-4a7a-adab-6d7cb1e01855
+
 Temporal Story is an application that generates bedtime stories using Artificial Intelligence, orchestrated by a Temporal workflow.
 
 This project combines a robust backend architecture based on Spring Boot and Temporal with a modern frontend interface built with Nuxt.js.

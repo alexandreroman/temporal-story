@@ -131,10 +131,11 @@ docker compose up -d
 
 The project uses Maven. The frontend build is automatically handled by the `frontend-maven-plugin` during the project build.
 
-You can start the application directly using the Maven wrapper:
+You can start the application directly using the Maven wrapper.
+**Note:** You must activate the `dev` profile to connect to the local Temporal instance.
 
 ```bash
-./mvnw spring-boot:run
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 The application will be accessible (by default) at `http://localhost:8080`.

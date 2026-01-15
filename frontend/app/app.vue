@@ -13,11 +13,15 @@
         </h1>
       </NuxtLink>
     </header>
-    <main class="flex-grow flex flex-col">
-      <NuxtPage />
-    </main>
-    <footer class="pb-4 text-center text-sm text-white/40">
-      <p>&copy; {{ new Date().getFullYear() }} Alexandre Roman. Licensed under Apache 2.0.</p>
-    </footer>
+    <div class="flex-grow flex flex-col w-full">
+      <div class="w-full my-auto flex flex-col">
+        <main>
+          <NuxtPage />
+        </main>
+        <footer class="pb-4 pt-6 text-center text-sm text-white/40">
+          <p>&copy; {{ new Date().getFullYear() }} Alexandre Roman. Licensed under Apache 2.0.</p>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>

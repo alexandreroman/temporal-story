@@ -59,7 +59,7 @@ const generateStory = async () => {
 </script>
 
 <template>
-  <div class="w-full flex-grow py-12 md:py-24 px-4 sm:px-6 lg:px-8 flex flex-col relative">
+  <div class="w-full flex-grow pt-12 md:pt-24 pb-4 px-4 sm:px-6 lg:px-8 flex flex-col relative">
     <main class="w-full max-w-3xl mx-auto my-auto">
         <div class="text-center mb-12 animate-slide-up">
 

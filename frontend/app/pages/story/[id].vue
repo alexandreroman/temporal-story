@@ -71,7 +71,7 @@ useHead({
 </script>
 
 <template>
-  <div class="w-full flex-grow py-24 flex items-center justify-center relative overflow-hidden">
+  <div class="w-full flex-grow pt-24 pb-8 flex items-center justify-center relative overflow-hidden">
     <main class="w-full max-w-7xl">
         <div class="animate-fade-in relative min-h-[50vh] flex flex-col justify-center">
             
